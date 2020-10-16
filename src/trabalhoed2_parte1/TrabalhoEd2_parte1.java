@@ -45,7 +45,7 @@ public class TrabalhoEd2_parte1 {
                             b.setAuthors(junta);
                             break;
                         case 1:
-                            //  b.setBestsellersr(junta);
+                             b.setBestsellersr(junta);
                             break;
                         case 2:
                             b.setcategories(junta);
@@ -68,7 +68,6 @@ public class TrabalhoEd2_parte1 {
                             } else {
                                 b.setRating_avg(-1.0);
                             }
-
                             break;
                         case 8:
                             if (!junta.equals(",") && !junta.equals("")) {
@@ -78,7 +77,6 @@ public class TrabalhoEd2_parte1 {
                         case 9:
                             b.setTitle(junta);
                             break;
-
                         default:
                             System.out.println("Posicao invalida");
 

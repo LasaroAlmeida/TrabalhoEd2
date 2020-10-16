@@ -18,6 +18,7 @@ public class Registros {
     private List<Integer> categories;
     private int contategorias;
     private String title;
+    private int contaseller=0;
 
      
     
@@ -84,26 +85,32 @@ public class Registros {
             aux = "";
         }
     }
-    public void setBestsellersr(String str) {
-        int auxx = str.length(), contt = 0, guarda;
-        String aux = "";
-        if (str == "") {
+   public void setBestsellersr(String str) {
+        int tam=str.length();
+        int contador=0;
+        String auxstr="";
+        if(str=="")
+        {
             bestsellersr.add(-1);
             return;
         }
-        while (contt < auxx - 1) {
-            while (str.charAt(contt) != ',' && contt < auxx) {
-                aux = aux + str.charAt(contt);
-                contt++;
-                if (contt > auxx - 1) {
-                    break;
-                }
-            }
-            bestsellersr.add(Integer.parseInt(aux));
-            aux = "";
+        while(contador<tam-1)
+        {
+            while(str.charAt(contador)!=',' && contador<tam)
+        {
+            auxstr=auxstr+str.charAt(contador);
+            contador++;
+            if(contador>=tam)
+                break;
         }
-
-    }
+//            System.out.println(auxstr);
+            bestsellersr.add(Integer.parseInt(auxstr));
+//            System.out.println(bestsellersr.get(contaseller));
+            contaseller++;
+            contador++;
+            auxstr="";
+        }
+}
     public int getRating_count() {
         return rating_count;
     }
