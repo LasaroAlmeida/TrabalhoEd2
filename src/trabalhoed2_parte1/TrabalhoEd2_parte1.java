@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class TrabalhoEd2_parte1 {
 
@@ -37,21 +40,17 @@ public class TrabalhoEd2_parte1 {
                         junta = junta + separa.charAt(cont1);
                         cont1++;
                     }
-                    // System.out.println(junta);
                     switch (cont2) {
-                       case 0:
+                        case 0:
                             b.setAuthors(junta);
                             break;
                         case 1:
-                            System.out.println(junta);
-                          //  b.setBestsellersr(junta);
+                            //  b.setBestsellersr(junta);
                             break;
                         case 2:
-                            System.out.println(junta);
                             b.setcategories(junta);
                             break;
                         case 3:
-                            System.out.println(junta);
                             b.setEdition(junta);
                             break;
                         case 4:
@@ -86,10 +85,17 @@ public class TrabalhoEd2_parte1 {
                     }
                     cont2 += 1;
                 }
-                System.out.println(b.getId());
                 a.add(b);
-                System.out.println(a.get(cont3).getRating_avg());
+                b = new Registros();
+                //System.out.println(linha);
+                //System.out.println(a.get(cont3).getRating_avg());
                 cont3++;
+            }
+            System.out.println("IMPRIMINDO REGISTRO ALEATORIO");
+            List<Registros> list = randomRegistro(1000, a);
+
+            for (Registros r : list) {
+                System.out.println(r.getId());
             }
 
         } catch (FileNotFoundException e) {
@@ -98,4 +104,22 @@ public class TrabalhoEd2_parte1 {
 //        );
     }
 
+    public static List<Registros> randomRegistro(int N, List<Registros> old_list) {
+        if (N > old_list.size()) {
+            System.out.println("Erro! N não pode ser maior que o número total de registros");
+            return null;
+        }
+        Random rand = new Random(System.currentTimeMillis());
+        Set<Integer> aux_set = new HashSet();
+        List<Registros> new_list = new ArrayList<>();
+        int n;
+        while (aux_set.size() < N) {
+            n = rand.nextInt(old_list.size());
+            aux_set.add(n);
+        }
+        for (int x : aux_set) {
+            new_list.add(old_list.get(x));
+        }
+        return new_list;
+    }
 }

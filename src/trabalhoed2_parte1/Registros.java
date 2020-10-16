@@ -17,7 +17,10 @@ public class Registros {
     private List<Integer> bestsellersr;
     private List<Integer> categories;
     private int contategorias;
+    private String title;
 
+     
+    
     public double getRating_avg() {
         return rating_avg;
     }
@@ -25,8 +28,7 @@ public class Registros {
     public String getIsbn13() {
         return isbn13;
     }
-    private String title;
-
+   
     public Registros() {
         this.edition="";
         contauthors=0;
@@ -54,7 +56,6 @@ public class Registros {
             auxx++;
         }
         authors.add(Integer.parseInt(aux));
-            System.out.println(authors.get(contauthors));
             contauthors++;
         if(str.charAt(auxx)==',')
             auxx=auxx+2;
@@ -74,10 +75,8 @@ public class Registros {
             while (str.charAt(auxx) != ',' && str.charAt(auxx) != ']') {
                 aux = aux + str.charAt(auxx);
                 auxx++;
-                System.out.println(aux);
             }
             categories.add(Integer.parseInt(aux));
-            System.out.println(categories.get(contategorias));
             contategorias++;
             if (str.charAt(auxx) == ',') {
                 auxx = auxx + 2;
@@ -87,7 +86,6 @@ public class Registros {
     }
     public void setBestsellersr(String str) {
         int auxx = str.length(), contt = 0, guarda;
-        System.out.println(auxx);
         String aux = "";
         if (str == "") {
             bestsellersr.add(-1);
@@ -95,17 +93,13 @@ public class Registros {
         }
         while (contt < auxx - 1) {
             while (str.charAt(contt) != ',' && contt < auxx) {
-                System.out.println(contt);
                 aux = aux + str.charAt(contt);
-                System.out.println(aux);
                 contt++;
                 if (contt > auxx - 1) {
                     break;
                 }
             }
-            System.out.println(aux);
             bestsellersr.add(Integer.parseInt(aux));
-            System.out.println("Impresso");
             aux = "";
         }
 
@@ -149,5 +143,4 @@ public class Registros {
     public String getEdition() {
         return edition;
     }
-
 }
