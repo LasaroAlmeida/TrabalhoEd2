@@ -39,12 +39,24 @@ public class TrabalhoEd2_parte1 {
                     }
                     // System.out.println(junta);
                     switch (cont2) {
-                        case 0:
-                           // b.setAuthors(junta);
+                       case 0:
+                            b.setAuthors(junta);
+                            break;
+                        case 1:
+                            System.out.println(junta);
+                          //  b.setBestsellersr(junta);
+                            break;
+                        case 2:
+                            System.out.println(junta);
+                            b.setcategories(junta);
+                            break;
+                        case 3:
+                            System.out.println(junta);
+                            b.setEdition(junta);
                             break;
                         case 4:
-                            BigInteger decima=new BigInteger(junta);
-                            b.setId(decima);
+                            b.setId(new BigInteger(junta));
+                            break;
                         case 5:
                             b.setIsbn10(junta);
                             break;
@@ -60,9 +72,9 @@ public class TrabalhoEd2_parte1 {
 
                             break;
                         case 8:
-                             if (!junta.equals(",") && !junta.equals("")) {
-                                 b.setRating_count(Integer.parseInt(junta));
-                             }
+                            if (!junta.equals(",") && !junta.equals("")) {
+                                b.setRating_count(Integer.parseInt(junta));
+                            }
                             break;
                         case 9:
                             b.setTitle(junta);
@@ -76,7 +88,7 @@ public class TrabalhoEd2_parte1 {
                 }
                 System.out.println(b.getId());
                 a.add(b);
-                System.out.println(a.get(1).getId());
+                System.out.println(a.get(cont3).getRating_avg());
                 cont3++;
             }
 
