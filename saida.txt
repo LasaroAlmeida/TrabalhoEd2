@@ -1,0 +1,26 @@
+***Os numeros de comparacoes, movimentacoes e tempo sao resultados da media de 5 testes***
+Numero de elementos: 10000
+|   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
+    QuickSort:           178034             33591              9,9064
+    MergeSort:            64635            198251            138,6961
+
+Numero de elementos: 20000
+|   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
+    QuickSort:           386511             71702             19,7176
+    MergeSort:           139322            426554            206,5024
+
+Numero de elementos: 100000
+|   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
+    QuickSort:          2278224            412438            146,6433
+    MergeSort:           817118           2486046           4595,2763
+
+Numero de elementos: 200000
+|   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
+    QuickSort:          4805780            871850            337,7023
+    MergeSort:          1737216           5275072          16838,1923
+
+Numero de elementos: 500000
+|   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
+    QuickSort:         13218019           2337956           1043,8034
+    MergeSort:          4720941          14196653         103677,4350
+
