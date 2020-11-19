@@ -53,7 +53,96 @@ public class RBTree{
                 }
             }
         }while(!insertion_place_found);
-        aux_node.addChild(val);
+        Node new_node = aux_node.addChild(val);
+        balanceTree(new_node);                
+    }
+
+    public void balanceTree(Node new_node){
+        Node parent = new_node.getParent();
+        if(parent == null){
+            new_node.setColor('b');
+            return;
+        }
+        if(parent.getColor() == 'r'){
+            Node grandparent = parent.getParent();
+            //Raiz sempre será preto, então grandparent nunca será nulo
+            if(new_node.getUncle() == null || new_node.getColor() == 'b'){
+                String rot_type = "";
+                if(parent.getValue() > new_node.getValue() && parent.getValue() > grandparent.getValue()){
+                    rot_type = "RL";
+                }else if(parent.getValue() < new_node.getValue() && parent.getValue() < grandparent.getValue()){
+                    rot_type = "LR";
+                }else if (parent.getValue() > new_node.getValue() && parent.getValue() < grandparent.getValue()){
+                    rot_type = "LL";
+                }else{
+                    rot_type = "RR";
+                }
+                fixRotation(new_node, rot_type);
+
+            }else{
+                new_node.recolorFamily();
+                balanceTree(grandparent);
+            }
+        }
+    }
+
+    public void fixRotation(Node n, String rot_type){
+        Node parent = n.getParent();
+        Node grandparent = parent.getParent();
+        if(rot_type.equals("LL")){
+            rotateRight(grandparent);
+            parent.swapColor(grandparent);
+            balanceTree(parent);
+        }else if(rot_type.equals("RR")){
+            rotateLeft(grandparent);
+            parent.swapColor(grandparent);
+            balanceTree(parent);
+        }else if(rot_type.equals("LR")){
+            rotateLeft(parent);
+            fixRotation(parent, "LL");
+        }else{
+
+            rotateRight(parent);
+            fixRotation(parent, "RR");
+
+        }
+
+    }
+
+    public void rotateLeft(Node n){
+        Node right = n.getRight();
+        Node parent = n.getParent();
+        n.setRight(right.getLeft());
+        right.setLeft(n);
+        n.setParent(right);
+        right.setParent(parent);
+        if(parent != null){
+            if(parent.getValue() > right.getValue())
+                parent.setLeft(right);
+            else
+                parent.setRight(right);
+
+        }else{
+            root = right;
+        }
+    }
+
+    public void rotateRight(Node n){
+        Node left = n.getLeft();
+        Node parent = n.getParent();
+        n.setLeft(left.getRight());
+        left.setRight(n);
+        n.setParent(left);
+        left.setParent(parent);
+        if(parent != null){
+            if(parent.getValue() > left.getValue())
+                parent.setLeft(left);
+            else
+                parent.setRight(left);
+
+        }else{
+            root = left;
+        }
     }
 
     public Node search(int val){
