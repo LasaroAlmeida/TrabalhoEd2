@@ -1,3 +1,4 @@
+package trabalhoed;
 public class RBTree{
 
     private Node root;

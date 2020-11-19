@@ -1,3 +1,4 @@
+package trabalhoed;
 public class Node{
 
     private int value;
