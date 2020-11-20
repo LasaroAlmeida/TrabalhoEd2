@@ -128,4 +128,10 @@ public class Registros {
     public String getEdition() {
         return edition;
     }
+
+    @Override
+    public String toString() {
+        return "Registros{" + "authors=" + authors + ", edition=" + edition + ", id=" + id + ", isbn10=" + isbn10 + ", isbn13=" + isbn13 + ", rating_avg=" + rating_avg + ", rating_count=" + rating_count + ", contauthors=" + contauthors + ", bestsellersr=" + bestsellersr + ", categories=" + categories + ", contategorias=" + contategorias + ", title=" + title + ", contaseller=" + contaseller + '}';
+    }
+    
 }
