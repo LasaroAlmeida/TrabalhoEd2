@@ -1,6 +1,5 @@
 package trabalhoed;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,13 +41,11 @@ public class TrabalhoEd2_parte1 {
 
         List<Authors> list_authors = new ArrayList<>();
         read_authors(list_authors, authors);
-        System.out.println("Leitura efetuada");
         quickSort_id(list_authors, 0, list_authors.size() - 1);
-        System.out.println("ordenado");
-        for (Authors i : list_authors) {
-            System.out.print(i.getId() + "\t");
-            System.out.println(i.getName());
-        }
+//        for (Authors i : list_authors) {
+//            System.out.print(i.getId() + "\t");
+//            System.out.println(i.getName());
+//        }
 
         int c = 0; //Variável que irá armazenar a linha atual do arquivo que está sendo lido
         try {
@@ -171,7 +168,7 @@ public class TrabalhoEd2_parte1 {
                     //nova linha será lida
                     estoqueCSV = "";
                     c++;
-                    if (c == 100) {
+                    if (c == 1000) {
                         break;
                     }
                     a.add(b);
@@ -179,16 +176,21 @@ public class TrabalhoEd2_parte1 {
                 }
             }
             //int i = 0;
-            HashTable table = new HashTable(50);
-            for (int i = 0; i < 50; i++) {
+            HashTable table = new HashTable(c/2);
+            for (int i = 0; i < c/2; i++) {
                 System.out.println(a.get(i).getTitle());
                 table.insert(a.get(i));
             }
-            for(int i=0;i<50;i++){
-                System.out.println(table.getPosition(i).getTitle());
+            System.out.println("");
+            for(int i=0;i<c;i++){
+                try {
+                System.out.println(i + "    " + table.getPosition(i).getTitle());
+                    
+                } catch (Exception e) {
+                }
             }
 
-            List<Registros> aleatoria = new ArrayList<Registros>();
+            List<Registros> aleatoria = new ArrayList<>();
             aleatoria = randomRegistro(a.size(), a);
             quickSort(aleatoria, 0, aleatoria.size() - 1);
 //            for (Registros r : aleatoria) {

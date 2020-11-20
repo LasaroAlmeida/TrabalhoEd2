@@ -1,6 +1,6 @@
 ***Os numeros de comparacoes, movimentacoes e tempo sao resultados da media de 5 testes***
 Numero de elementos: 250
 |   Algoritmo   ||  Comparacoes  || Movimentacoes |||        Tempo(ms) |
-    QuickSort:                0               176              0,0000
-    MergeSort:              767                 0              0,0000
+    QuickSort:                0              2575              0,0000
+    MergeSort:            13617                 0              0,0000
 
