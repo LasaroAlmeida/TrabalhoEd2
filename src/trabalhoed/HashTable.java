@@ -1,14 +1,18 @@
 package trabalhoed;
 
+import java.math.BigInteger;
 import java.util.Random;
 
 public class HashTable {
 
-    Registros[] table;
-    int length;
+    private Registros[] table;
+    private int length;
+    private int m;
+    private long colisao = 0;
 
     public HashTable(int length) {
         this.length = encontra_primo_menor(length * 2);
+        this.m = encontra_primo_menor(this.length);
         this.table = new Registros[this.length];
         for (int i = 0; i < this.length; i++) {
             this.table[i] = null;
@@ -16,34 +20,50 @@ public class HashTable {
     }
 
     public void insert(Registros l) {
-        int h1 = hash_H1(l);
+        int h1 = (int) hash_H1(l);
         int h2 = hash_H2(l);
         int i = 0;
         int h = double_hash(h1, h2, i);
-        System.out.println("posicao " + h);
+//        System.out.println("h1- " + h1 + " h2- " + h2 + "h- " + h + "titulo: " + l.getTitle());
         while (i < this.length) {
 
             if (this.table[h] == null) {
                 this.table[h] = l;
                 return;
-            }
-            else if(this.table[h].getTitle().equals(l.getTitle())) {
+            } else if (this.table[h].getTitle().equals(l.getTitle())) {
+//                System.out.println("elemento repetido " + l.getTitle());
                 return;
             }
+
             i += 1;
+            this.colisao += 1;
             h = double_hash(h1, h2, i);
         }
     }
 
+    public long getColisao() {
+        return colisao;
+    }
+
     private int hash_H1(Registros l) {
-        int result = 1;
+        long result = 0;
         String title = l.getTitle();
-        double b = title.length() * 0.30;
+        double b = title.length() * 0.4;
         int a = (int) b;
         for (int i = 0; i < a; i++) {
-            result *= title.charAt(i);
+            if (i + 1 == a) {
+                if (title.charAt(i) % 2 == 1) {
+                    result *= (title.charAt(i)+2);
+                    result += 1;
+                } else {
+                    result *=title.charAt(i);
+                }
+
+            } else {
+                result += title.charAt(i);
+            }
         }
-        return (result & 0x7FFFFFFF) % this.length;
+        return (int) (result) % this.length;
     }
 
     private int double_hash(int h1, int h2, int i) {
@@ -52,14 +72,17 @@ public class HashTable {
 
     private int hash_H2(Registros l) {
         String title = l.getTitle();
-        int m = encontra_primo_menor(this.length);
-        double b = title.length() * 0.7;
+        double b = title.length() * 0.6;
         int c = (int) b;
-        int result = 1;
+        long result = 0;
         for (; c < title.length(); c++) {
-            result *= title.charAt(c);
+            if (c + 1 == title.length()) {
+                result *= (int)title.charAt(c)*3.25;
+            } else {
+                result += title.charAt(c);
+            }
         }
-        return 3 + (result & 0x7FFFFFFF) % m;
+        return 3 + (int) (result) % m;
     }
 
     public Registros getPosition(int i) {

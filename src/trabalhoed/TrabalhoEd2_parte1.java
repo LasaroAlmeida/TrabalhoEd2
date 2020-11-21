@@ -42,11 +42,6 @@ public class TrabalhoEd2_parte1 {
         List<Authors> list_authors = new ArrayList<>();
         read_authors(list_authors, authors);
         quickSort_id(list_authors, 0, list_authors.size() - 1);
-//        for (Authors i : list_authors) {
-//            System.out.print(i.getId() + "\t");
-//            System.out.println(i.getName());
-//        }
-
         int c = 0; //Variável que irá armazenar a linha atual do arquivo que está sendo lido
         try {
             Scanner leitor_one = new Scanner(input_file_2);
@@ -168,28 +163,28 @@ public class TrabalhoEd2_parte1 {
                     //nova linha será lida
                     estoqueCSV = "";
                     c++;
-                    if (c == 1000) {
-                        break;
-                    }
+//                    if (c ==100) {
+//                        break;
+//                    }
                     a.add(b);
                     b = new Registros();
                 }
             }
             //int i = 0;
-            HashTable table = new HashTable(c/2);
-            for (int i = 0; i < c/2; i++) {
-                System.out.println(a.get(i).getTitle());
+            HashTable table = new HashTable(c-1);
+            for (int i = 0; i < c-1; i++) {
                 table.insert(a.get(i));
             }
             System.out.println("");
-            for(int i=0;i<c;i++){
+            for(int i=0;i<c*2;i++){
                 try {
                 System.out.println(i + "    " + table.getPosition(i).getTitle());
                     
                 } catch (Exception e) {
+                    System.out.println("");
                 }
             }
-
+            System.out.println("Colises: " + table.getColisao());
             List<Registros> aleatoria = new ArrayList<>();
             aleatoria = randomRegistro(a.size(), a);
             quickSort(aleatoria, 0, aleatoria.size() - 1);
