@@ -28,15 +28,20 @@ public class TrabalhoEd2_parte1 {
 
         File input_file = new File(args[0]);
         File input_file_2 = new File(args[1]);
+        File authors = new File(args[2]); ///Abri o txt de autores
         String linha = "", junta; //Variáveis String. Linha receberá cada linha do arquivo lida via nextLine()
-                                //Junta armazenará temporariamente o valor de cada campo separado que será
-                                //adicionado a um objeto da classe Registros
+        //Junta armazenará temporariamente o valor de cada campo separado que será
+        //adicionado a um objeto da classe Registros
         String auxiliar = ""; //String usada para fazer a leitura da entrada dos parâmetros inteiros
-        List<Integer> length = new ArrayList<Integer>();
+        List<Integer> length = new ArrayList<>();
         String estoqueCSV = ""; //String irá concatenar múltiplas linhas quando um mesmo registro ocupar
-                                // mais de uma mesma linha no arquivo csv
-        List<Registros> a = new ArrayList<Registros>();
+        // mais de uma mesma linha no arquivo csv
+        List<Registros> a = new ArrayList<>();
         Registros b = new Registros();
+
+        List<Authors> list_authors = new ArrayList<>();
+        read_authors(list_authors, authors);
+        quickSort_id(list_authors, 0, list_authors.size() - 1);
         int c = 0; //Variável que irá armazenar a linha atual do arquivo que está sendo lido
         try {
             Scanner leitor_one = new Scanner(input_file_2);
@@ -64,20 +69,20 @@ public class TrabalhoEd2_parte1 {
             while (leitor.hasNext()) {
                 linha = leitor.nextLine();
                 linha = linha.replaceAll("(?x)[\"]{2}(?=[^{,}])", "'"); //Expressão regular onde, aspas
-                                           //duplas consecutivas que não não precedem uma vírgula são
-                                           //substituídas por um ', para facilitar a separação dos campos                                          
+                //duplas consecutivas que não não precedem uma vírgula são
+                //substituídas por um ', para facilitar a separação dos campos                                          
                 estoqueCSV += linha;
                 int num = 0;
                 for (int i = 0; i < estoqueCSV.length(); i++) { //Loop que conta a quantidade de aspas
-                                                //duplas dentro das linhas concatenadas e armazena em uma
-                                                //variável num. Isso será útil para saber quando a leitura
-                                                //do registro terminou
+                    //duplas dentro das linhas concatenadas e armazena em uma
+                    //variável num. Isso será útil para saber quando a leitura
+                    //do registro terminou
                     if (estoqueCSV.charAt(i) == '"') {
                         num++;
                     }
                 }
                 if (num >= 20) { //Com 20 aspas duplas, 10 campos foram lidos, portanto, é hora de fazer o
-                                //registro
+                    //registro
                     String[] result = estoqueCSV.split("(?x)   "
                             + ",          "
                             + // Dividir String na virgula
@@ -131,7 +136,7 @@ public class TrabalhoEd2_parte1 {
                                 break;
                             case 7:
                                 if (!junta.equals(",") && !junta.equals("")) { //Controle de valor não-
-                                                                    //numérico fora da classe
+                                    //numérico fora da classe
                                     b.setRating_avg(Double.parseDouble(junta));
                                 } else {
                                     b.setRating_avg(-1.0);
@@ -139,8 +144,8 @@ public class TrabalhoEd2_parte1 {
                                 break;
                             case 8:
                                 if (!junta.equals(",") && !junta.equals("")) { //Controle de valor não-
-                                                                    //numérico fora da classe
-                                    b.setRating_count(Integer.parseInt(junta)); 
+                                    //numérico fora da classe
+                                    b.setRating_count(Integer.parseInt(junta));
                                 } else {
                                     b.setRating_count(-1);
                                 }
@@ -156,50 +161,78 @@ public class TrabalhoEd2_parte1 {
                     }
                     //Agora que o registro foi armazenado no objeto, variáveis registram que uma
                     //nova linha será lida
-                    estoqueCSV = ""; 
-                    c++;                     
+                    estoqueCSV = "";
+                    c++;
+//                    if (c ==100) {
+//                        break;
+//                    }
                     a.add(b);
                     b = new Registros();
                 }
             }
-            int i = 0;
-            List<Registros> aleatoria = new ArrayList<Registros>();
-            double start_time;
-            double final_time;
-            int cont = 0;
-            while (i < number_tests) {
-
-                aleatoria = randomRegistro(length.get(i), a);
-                List<Registros> aleatoria_aux = aleatoria;
-                index = i;
-                option = true; // Variável option define qual algoritmo de ordenação será contabilizado 
-                                // para contar comparações. Cada algorimo ocupa metade de cada array, que                                
-                                // tem um tamanho de 2*number_tests
-                start_time = System.nanoTime();
-                quickSort(aleatoria, 0, aleatoria.size() - 1);
-                final_time = System.nanoTime();
-                time[i] += ((final_time - start_time) / 1000000.0);
-
-                option = false;
-                start_time = System.nanoTime();
-                MergeSort(aleatoria_aux, 0, aleatoria_aux.size());
-                final_time = System.nanoTime();
-                time[i + number_tests] += ((final_time - start_time) / 1000000.0);
-                
-                aleatoria.clear();
-                aleatoria_aux.clear();
-                cont++;
-                if (cont == 5) { //Calcular média de todas as medidas
-                    time[i] = time[i] / 5.0;
-                    comparacoes[i] /= 5;
-                    movimentacoes[i] /= 5;
-                    time[i+number_tests]/=5.0;
-                    comparacoes[i+number_tests] /= 5;
-                    movimentacoes[i+number_tests] /= 5;
-                    i += 1;
-                    cont = 0;
+            //int i = 0;
+            HashTable table = new HashTable(c-1);
+            for (int i = 0; i < c-1; i++) {
+                table.insert(a.get(i));
+            }
+            System.out.println("");
+            for(int i=0;i<c*2;i++){
+                try {
+                System.out.println(i + "    " + table.getPosition(i).getTitle());
+                    
+                } catch (Exception e) {
+                    System.out.println("");
                 }
             }
+            System.out.println("Colises: " + table.getColisao());
+            List<Registros> aleatoria = new ArrayList<>();
+            aleatoria = randomRegistro(a.size(), a);
+            quickSort(aleatoria, 0, aleatoria.size() - 1);
+//            for (Registros r : aleatoria) {
+//                System.out.println(r.toString());
+//            }
+//            double start_time;
+//            double final_time;
+//            int cont = 0;
+//            while (i < number_tests) {
+
+//            List<Registros> aleatoria = new ArrayList<Registros>();
+//            double start_time;
+//            double final_time;
+//            int cont = 0;
+//            while (i < number_tests) {
+//
+//                aleatoria = randomRegistro(length.get(i), a);
+//                List<Registros> aleatoria_aux = aleatoria;
+//                index = i;
+//                option = true; // Variável option define qual algoritmo de ordenação será contabilizado 
+//                                // para contar comparações. Cada algorimo ocupa metade de cada array, que                                
+//                                // tem um tamanho de 2*number_tests
+//                start_time = System.nanoTime();
+//                quickSort(aleatoria, 0, aleatoria.size() - 1);
+//                final_time = System.nanoTime();
+//                time[i] += ((final_time - start_time) / 1000000.0);
+//
+//                option = false;
+//                start_time = System.nanoTime();
+//                MergeSort(aleatoria_aux, 0, aleatoria_aux.size());
+//                final_time = System.nanoTime();
+//                time[i + number_tests] += ((final_time - start_time) / 1000000.0);
+//                
+//                aleatoria.clear();
+//                aleatoria_aux.clear();
+//                cont++;
+//                if (cont == 5) { //Calcular média de todas as medidas
+//                    time[i] = time[i] / 5.0;
+//                    comparacoes[i] /= 5;
+//                    movimentacoes[i] /= 5;
+//                    time[i+number_tests]/=5.0;
+//                    comparacoes[i+number_tests] /= 5;
+//                    movimentacoes[i+number_tests] /= 5;
+//                    i += 1;
+//                    cont = 0;
+//                }
+//            }
             print_out(length);
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,11 +287,11 @@ public class TrabalhoEd2_parte1 {
         }
         Random rand = new Random(System.currentTimeMillis());
         Set<Integer> aux_set = new HashSet(); //Estrutura de Set para garantir que o mesmo registro não
-                                            //será selecionado mais de uma vez
+        //será selecionado mais de uma vez
         List<Registros> new_list = new ArrayList<>();
         int n;
         while (aux_set.size() < N) { //apenas terminar quando o HashSet estiver cheio, isto é, quando houver
-                                    //N registros DIFERENTES
+            //N registros DIFERENTES
             n = rand.nextInt(old_list.size());
             aux_set.add(n);
         }
@@ -308,6 +341,32 @@ public class TrabalhoEd2_parte1 {
         }
     }
 
+    public static void quickSort_id(List<Authors> new_list, int first, int last) {
+
+        int m = (int) ((first + last) / 2); ///O elemento do meio da lista é escolhido com pivo
+        Authors pivo = new_list.get(m);
+        int i = first, j = last;
+        do {
+            while (new_list.get(i).getId() < pivo.getId()) {///enquanto id da posicao i for menor que o id da posicao pivo
+                i += 1;
+            }
+            while (new_list.get(j).getId() > pivo.getId()) {///enquanto id da posicao j for maior que o id da posicao pivo
+                j -= 1;
+            }
+            if (i <= j) {
+                Collections.swap(new_list, i, j);///Faz a troca da posiccao i com a posicao j da lista
+                i++;
+                j--;
+            }
+        } while (i <= j);///parte recursiva
+        if (first < j) {
+            quickSort_id(new_list, first, j);
+        }
+        if (i < last) {
+            quickSort_id(new_list, i, last);
+        }
+    }
+
     public static void MergeSort(List<Registros> a, int p, int r) {
         int q;
         if (p < r - 1) {
@@ -328,10 +387,9 @@ public class TrabalhoEd2_parte1 {
         k = 0;
 
         while (i < q && j < r) //Compara valores da esquerda e direita e adiciona os menores 
-                            //valores entre os 2 em uma lista auxiliar
+        //valores entre os 2 em uma lista auxiliar
         {
-            if (compare(a.get(i).getTitle(), a.get(j).getTitle())) 
-            {
+            if (compare(a.get(i).getTitle(), a.get(j).getTitle())) {
                 aux.add(a.get(i));
                 movimentacoes[number_tests + index] += 1;
                 i++;
@@ -357,6 +415,38 @@ public class TrabalhoEd2_parte1 {
         for (i = p; i < r; i++) { //Coloca valores da lista auxiliar na principal
             a.set(i, aux.get(i - p));
             movimentacoes[number_tests + index] += 1;
+        }
+    }
+
+    public static void read_authors(List<Authors> authors, File ex_file) {
+        String aux = "";
+        String word;
+        Authors a = new Authors();
+        try {
+            Scanner in = new Scanner(ex_file);
+            aux = in.nextLine();
+            while (in.hasNext()) {
+                aux = in.nextLine();
+                String[] line = aux.split(",");
+                int j = 0;
+                for (String i : line) {
+                    word = i.replace("\"", "");
+                    switch (j) {
+                        case 0:
+                            a.setId(Integer.parseInt(word));
+                        case 1:
+                            if (word.equals("")) {
+                                a.setName("Nome nao informado");
+                            } else {
+                                a.setName(word);
+                            }
+                    }
+                    j++;
+                }
+                authors.add(a);
+                a = new Authors();
+            }
+        } catch (Exception e) {
         }
     }
 }
