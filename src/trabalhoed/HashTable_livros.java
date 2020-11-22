@@ -20,14 +20,12 @@ public class HashTable_livros {
         int h2 = hash_H2(l);
         int i = 0;
         int h = double_hash(h1, h2, i);
-//        System.out.println("h1- " + h1 + " h2- " + h2 + "h- " + h + "titulo: " + l.getTitle());
         while (i < this.length) {
 
             if (this.table[h] == null) {
                 this.table[h] = l;
                 return;
             } else if (this.table[h].getTitle().equals(l.getTitle())) {
-//                System.out.println("elemento repetido " + l.getTitle());
                 return;
             }
 

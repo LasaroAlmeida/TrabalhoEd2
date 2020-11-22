@@ -1,65 +1,80 @@
 package trabalhoed;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BTree{
+public class BTree {
 
     private int m; //Grau dos nós da árvore
     private BNode root;
+    private long comparacoes;
 
-    public BTree(int m){
-        this.m = m;
+    public BTree(int m) {
+        this.m = (m*2)+1;
         this.root = null;
+        this.comparacoes = 0;
     }
 
-
-    public void printTree(){
-        if(root != null){
+    public void printTree() {
+        if (root != null) {
             root.printNode(0, -1);
         }
     }
 
-    public void rootOverflow(){
-        ArrayList<Integer> keyList = root.getKeyList();
-        int middlePoint = (keyList.size()-1)/2;
+    public void rootOverflow() {
+        ArrayList<Registros> keyList = root.getKeyList();
+        int middlePoint = (keyList.size() - 1) / 2;
         BNode left = new BNode(this.m);
         BNode newRoot = new BNode(this.m);
         BNode right = new BNode(this.m);
         int i;
-        for(i = 0; i < keyList.size(); i++){
-            if(i < middlePoint){
+        for (i = 0; i < keyList.size(); i++) {
+            if (i < middlePoint) {
                 left.insertKey(keyList.get(i));
-                if(!root.isLeaf()) left.addChild(root.getChild(i));
+                if (!root.isLeaf()) {
+                    left.addChild(root.getChild(i));
+                    this.comparacoes += 1;
+                }
             }
-            if(i == middlePoint){
+            if (i == middlePoint) {
                 newRoot.insertKey(keyList.get(i));
-                if(!root.isLeaf()) left.addChild(root.getChild(i));
+                if (!root.isLeaf()) {
+                    left.addChild(root.getChild(i));
+                    this.comparacoes += 1;
+                }
             }
-            if(i > middlePoint){
+            if (i > middlePoint) {
                 right.insertKey(keyList.get(i));
-                if(!root.isLeaf()) right.addChild(root.getChild(i));
+                if (!root.isLeaf()) {
+                    right.addChild(root.getChild(i));
+                    this.comparacoes += 1;
+                }
             }
         }
-        if(!root.isLeaf()) right.addChild(root.getChild(i));
+        if (!root.isLeaf()) {
+            right.addChild(root.getChild(i));
+            this.comparacoes += 1;
+        }
         newRoot.addChild(left);
         newRoot.addChild(right);
+        this.comparacoes += 2;
         root = newRoot;
     }
 
-    public BNode getParent(BNode n){
+    public BNode getParent(BNode n) {
         BNode aux = root;
         BNode parent = null;
-        while(aux != n){
+        while (aux != n) {
             parent = aux;
-            ArrayList<Integer> auxKeyList = aux.getKeyList();
-            for(int i = 0; i < auxKeyList.size(); i++){
-                ArrayList<Integer> NKeyList = n.getKeyList();
-                if(auxKeyList.get(i) > NKeyList.get(NKeyList.size()-1)){
+            ArrayList<Registros> auxKeyList = aux.getKeyList();
+            for (int i = 0; i < auxKeyList.size(); i++) {
+                ArrayList<Registros> NKeyList = n.getKeyList();
+                if (compare(NKeyList.get(NKeyList.size() - 1).getId(), auxKeyList.get(i).getId())) {
                     aux = aux.getChild(i);
                     break;
-                }else if(i == auxKeyList.size()-1){
-                    aux = aux.getChild(i+1);
+                } else if (i == auxKeyList.size() - 1) {
+                    aux = aux.getChild(i + 1);
                 }
             }
         }
@@ -67,49 +82,66 @@ public class BTree{
 
     }
 
-    public void normalOverflow(BNode overNode, BNode parentNode){
-        ArrayList<Integer> keyList = overNode.getKeyList();
-        int middlePoint = (keyList.size()-1)/2;
+    public void normalOverflow(BNode overNode, BNode parentNode) {
+        ArrayList<Registros> keyList = overNode.getKeyList();
+        int middlePoint = (keyList.size() - 1) / 2;
         BNode left = new BNode(this.m);
         BNode right = new BNode(this.m);
         int i;
-        for(i = 0; i < keyList.size(); i++){
-            if(i < middlePoint){
+        for (i = 0; i < keyList.size(); i++) {
+            if (i < middlePoint) {
                 left.insertKey(keyList.get(i));
-                if(!overNode.isLeaf()) left.addChild(overNode.getChild(i));
+                if (!overNode.isLeaf()) {
+                    left.addChild(overNode.getChild(i));
+                    comparacoes += 1;
+                }
             }
-            if(i == middlePoint){
+            if (i == middlePoint) {
                 parentNode.insertKey(keyList.get(i));
                 parentNode.removeChild(overNode);
-                if(!overNode.isLeaf()) left.addChild(overNode.getChild(i));
+                if (!overNode.isLeaf()) {
+                    left.addChild(overNode.getChild(i));
+                    this.comparacoes += 1;
+                }
             }
-            if(i > middlePoint){
+            if (i > middlePoint) {
                 right.insertKey(keyList.get(i));
-                if(!overNode.isLeaf()) right.addChild(overNode.getChild(i));
+                if (!overNode.isLeaf()) {
+                    right.addChild(overNode.getChild(i));
+                    this.comparacoes += 1;
+                }
             }
         }
-        if(!overNode.isLeaf()) right.addChild(overNode.getChild(i));
+        if (!overNode.isLeaf()) {
+            right.addChild(overNode.getChild(i));
+            this.comparacoes += 1;
+        }
         parentNode.addChild(left);
         parentNode.addChild(right);
-        if(parentNode.isFull()){
-            if(parentNode == root){
-                System.out.println("overflow chegou na raiz oloco meu");
+        this.comparacoes += 2;
+        if (parentNode.isFull()) {
+            if (parentNode == root) {
                 rootOverflow();
-            }else{
+            } else {
                 normalOverflow(parentNode, getParent(parentNode));
             }
         }
     }
 
-    private BNode auxSearch(BNode n, int val){
-        for(int i : n.getKeyList()){
-            if(i == val) return n;
+    private BNode auxSearch(BNode n, Registros val) {
+        for (Registros i : n.getKeyList()) {
+            if (i.getId().equals(val.getId())) {
+                this.comparacoes += 1;
+                return n;
+            }
         }
-        if(n.isLeaf()) return null;
-        ArrayList<Integer> keyList = n.getKeyList();
+        if (n.isLeaf()) {
+            return null;
+        }
+        ArrayList<Registros> keyList = n.getKeyList();
         int i;
-        for(i = 0; i < keyList.size(); i++){
-            if(keyList.get(i) > val){
+        for (i = 0; i < keyList.size(); i++) {
+            if (compare(val.getId(), keyList.get(i).getId())) {
                 return auxSearch(n.getChild(i), val);
             }
 
@@ -117,39 +149,41 @@ public class BTree{
         return auxSearch(n.getChild(i), val);
     }
 
-    public BNode search(int val){
+    public BNode search(Registros val) {
         return auxSearch(root, val);
     }
 
-    public void insert(int val){
-        if(root == null){
+    public void insert(Registros val) {
+        if (root == null) {
             root = new BNode(this.m);
             root.insertKey(val);
-        }else{
+        } else {
             boolean finished = false;
             BNode aux = root;
             BNode parentNode = null;
-            while(!finished){
-                if(aux.isLeaf()){
+            while (!finished) {
+                if (aux.isLeaf()) {
                     aux.insertKey(val);
-                    if(aux.isFull()){
-                        if(aux == root){
+                    if (aux.isFull()) {
+                        if (aux == root) {
                             rootOverflow();
-                        }else{
+                            this.comparacoes += 1;
+                        } else {
                             normalOverflow(aux, parentNode);
+                            this.comparacoes += 1;
                         }
                     }
                     finished = true;
-                }else{
-                    List<Integer> keyList = aux.getKeyList();
-                    for(int i = 0; i < keyList.size(); i++){
-                        if(keyList.get(i) > val){
+                } else {
+                    List<Registros> keyList = aux.getKeyList();
+                    for (int i = 0; i < keyList.size(); i++) {
+                        if (compare(val.getId(), keyList.get(i).getId())) {
                             parentNode = aux;
                             aux = aux.getChild(i);
                             break;
-                        }else if(i == keyList.size() - 1){ //Não houve key maior que a nova no nó, inserir no último filho
+                        } else if (i == keyList.size() - 1) { //Não houve key maior que a nova no nó, inserir no último filho
                             parentNode = aux;
-                            aux = aux.getChild(i+1);
+                            aux = aux.getChild(i + 1);
                         }
                     }
                 }
@@ -157,5 +191,14 @@ public class BTree{
         }
     }
 
+    public boolean compare(BigInteger one, BigInteger two) {
+        int aux = one.compareTo(two);
+        comparacoes += 1;
+        return aux < 0;
+    }
 
+    public long getComparacoes() {
+        return comparacoes;
+    }
+    
 }

@@ -187,6 +187,7 @@ public class TrabalhoEd2_parte1 {
                         autores_mais_Frequentes(a, authors);
                         break;
                     case 3:
+                        Busca_em_Estruturas_Balanceadas(a);
                         break;
                     case 0:
                         break;
@@ -519,7 +520,6 @@ public class TrabalhoEd2_parte1 {
                 }
             }
         }
-
         list_authors.clear();
         for (int i = 0; i < authors.getLength(); i++) {
             Authors p = authors.getPosition(i);
@@ -550,13 +550,57 @@ public class TrabalhoEd2_parte1 {
             file.printf("|%8s  |", p.getNumber_books());
             file.printf("|%9s  |", p.getId());
             file.println("|  " + p.getName());
-
         }
         file.println("==========================================================================================\n\n");
     }
 
     public static void Busca_em_Estruturas_Balanceadas(List<Registros> livros) {
-          
-    }
+        file.println("Secao 2: =================================================================================");
+        int i = 0;
+        List<Registros> aleatoria = new ArrayList<Registros>();
 
+        RBTree read;
+        double start_time;
+        double final_time;
+        int cont = 0;
+        System.out.println(number_tests);
+        file.print("Arvore Vermelho-Preto");
+        System.out.println("Arvore Vermelho-Preto");
+        while (i < number_tests) {
+            int t = length.get(i);
+            
+            if (i == 0) {
+                file.println("Numero de Elementos: " + t);
+                file.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
+                file.println("Insercao:");
+                System.out.println("Numero de Elementos: " + t);
+                System.out.println("Insercao:");
+                System.out.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
+            }
+            
+            aleatoria = randomRegistro(t, livros);
+            if(aleatoria==null){
+                break;
+            }
+            read = new RBTree(aleatoria.get(0));
+            System.out.println("Aqui");
+            start_time = System.nanoTime();
+            for (int g = 1; g < aleatoria.size(); g++) {
+                System.out.println(aleatoria.get(g));
+                read.insert(aleatoria.get(g));
+                //System.out.println("teste");
+            }
+            final_time = System.nanoTime();
+            file.printf("|%14s |", (final_time - start_time) / 1000000.0);
+            file.printf("|%14s |", read.getComparacoes());
+            file.printf("|%14s |%n", "0");
+            System.out.printf("|%14s |", (final_time - start_time) / 1000000.0);
+            System.out.printf("|%14s |", read.getComparacoes());
+            System.out.printf("|%14s |%n", "0");
+            aleatoria.clear();
+            i += 1;
+            
+        }
+        file.println("==========================================================================================\n\n");
+    }
 }
