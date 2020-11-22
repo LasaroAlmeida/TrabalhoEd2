@@ -3,12 +3,13 @@ package trabalhoed;
 public class Authors {
     private int id;///Identificador do autor
     private String name; ///Nome do autor
+    private int number_books;
     
     public Authors(){///Construtor
        this.id=0;
        this.name="";
+       this.number_books=0;
     }
-    
     
     //GETTERS E SETTERS
     public int getId() {
@@ -25,6 +26,14 @@ public class Authors {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getNumber_books() {
+        return number_books;
+    }
+
+    public void setNumber_books() {
+        this.number_books+=1;
     }
    
 }

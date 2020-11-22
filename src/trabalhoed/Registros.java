@@ -25,6 +25,10 @@ public class Registros {
         return this.title;
     }
 
+    public List<Integer> getAuthors() {
+        return authors;
+    }
+
      
     
     public double getRating_avg() {
@@ -49,7 +53,7 @@ public class Registros {
     {
         
         if(str.equals("[]")){
-            this.authors.add(-1);
+           // this.authors.add(-1);
             return;
         }
         
