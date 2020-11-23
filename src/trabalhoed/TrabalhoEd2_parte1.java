@@ -28,6 +28,7 @@ public class TrabalhoEd2_parte1 {
     public static FileWriter output_file;
     public static PrintWriter file;
     public static List<Integer> length = new ArrayList<>();
+    public static List<Integer> length_forTree = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -60,8 +61,10 @@ public class TrabalhoEd2_parte1 {
                     number_tests = Integer.parseInt(auxiliar);
                 } else if (c == number_tests + 1) {
                     N = Integer.parseInt(auxiliar);
-                } else {
+                } else if (c <= number_tests) {
                     length.add(Integer.parseInt(auxiliar));
+                } else {
+                    length_forTree.add(Integer.parseInt(auxiliar));
                 }
                 c += 1;
             }
@@ -555,6 +558,9 @@ public class TrabalhoEd2_parte1 {
     }
 
     public static void Busca_em_Estruturas_Balanceadas(List<Registros> livros) {
+        time = new double[4];
+        comparacoes = new long[4];
+        movimentacoes = new long[4];
         file.println("Secao 2: =================================================================================");
         int i = 0;
         List<Registros> aleatoria = new ArrayList<Registros>();
@@ -563,13 +569,13 @@ public class TrabalhoEd2_parte1 {
         double start_time;
         double final_time;
         int cont = 0;
+
         System.out.println(number_tests);
         file.print("Arvore Vermelho-Preto");
         System.out.println("Arvore Vermelho-Preto");
         while (i < number_tests) {
             int t = length.get(i);
-            
-            if (i == 0) {
+            if (cont == 0) {
                 file.println("Numero de Elementos: " + t);
                 file.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
                 file.println("Insercao:");
@@ -577,30 +583,83 @@ public class TrabalhoEd2_parte1 {
                 System.out.println("Insercao:");
                 System.out.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
             }
-            
             aleatoria = randomRegistro(t, livros);
-            if(aleatoria==null){
+            if (aleatoria == null) {
                 break;
             }
             read = new RBTree(aleatoria.get(0));
-            System.out.println("Aqui");
             start_time = System.nanoTime();
             for (int g = 1; g < aleatoria.size(); g++) {
-                System.out.println(aleatoria.get(g));
+                System.out.println(aleatoria.get(g).getTitle());
                 read.insert(aleatoria.get(g));
-                //System.out.println("teste");
             }
             final_time = System.nanoTime();
-            file.printf("|%14s |", (final_time - start_time) / 1000000.0);
-            file.printf("|%14s |", read.getComparacoes());
-            file.printf("|%14s |%n", "0");
-            System.out.printf("|%14s |", (final_time - start_time) / 1000000.0);
-            System.out.printf("|%14s |", read.getComparacoes());
-            System.out.printf("|%14s |%n", "0");
+            time[0] += (final_time - start_time) / 1000000.0;
+            comparacoes[0] += read.getComparacoes();
+            //movimentacoes[0]+=;
+            cont++;
+            if (cont==5) {
+                file.printf("|%14.4f |", time[0] / 5.0);
+                file.printf("|%14s |", comparacoes[0] / 5);
+                file.printf("|%14s |%n", movimentacoes[0] / 5);
+                System.out.printf("|%14.4f |", time[0] / 5.0);
+                System.out.printf("|%14s |", comparacoes[0] / 5);
+                System.out.printf("|%14s |%n", movimentacoes[0] / 5);
+                i += 1;
+                cont=0;
+            }
             aleatoria.clear();
-            i += 1;
-            
         }
+
+        //Arvore B
+//        i = 0;
+//        cont = 0;
+//        BTree bt;
+//        file.println("Arvore B");
+//        System.out.println("Arvore B");
+//        int j = 0;
+//        while (j < length_forTree.size()) {
+//            
+//            int d = length_forTree.get(i);
+//            
+//            while (i < number_tests) {
+//                int t = length.get(i);
+//                if (cont == 0) {
+//                    file.println("D= " + d);
+//                    file.println("Numero de Elementos: " + t);
+//                    file.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
+//                    file.println("Insercao:");
+//                    System.out.println("Numero de Elementos: " + t);
+//                    System.out.println("Insercao:");
+//                    System.out.println("|   Tempo(ms)   |" + "|  Comparacoes  |" + "| Movimentacoes |");
+//                }
+//                aleatoria = randomRegistro(t, livros);
+//                if (aleatoria == null) {
+//                    break;
+//                }
+//                bt = new BTree(d);
+//                start_time = System.nanoTime();
+//                for (int g = 0; g < aleatoria.size(); g++) {
+//                    bt.insert(aleatoria.get(g));
+//                }
+//                final_time = System.nanoTime();
+//                time[2] += (final_time - start_time) / 1000000.0;
+//                comparacoes[2] += bt.getComparacoes();
+//                //movimentacoes[2]+=;
+//                cont += 1;
+//                if (cont == 5) {
+//                    file.printf("|%14.4f |", time[2] / 5.0);
+//                    file.printf("|%14s |", comparacoes[2] / 5);
+//                    file.printf("|%14s |%n", movimentacoes[2] / 5);
+//                    System.out.printf("|%14.4f |", time[2] / 5.0);
+//                    System.out.printf("|%14s |", comparacoes[2] / 5);
+//                    System.out.printf("|%14s |%n", movimentacoes[2] / 5);
+//                    i += 1;
+//                }
+//                aleatoria.clear();
+//            }
+//            j++;
+//        }
         file.println("==========================================================================================\n\n");
     }
 }

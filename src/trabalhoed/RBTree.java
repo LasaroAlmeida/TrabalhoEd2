@@ -51,7 +51,6 @@ public class RBTree {
 
     public void insert(Registros book) {
         Node aux_node = root;
-        System.out.println("Aqui chegou saporra");
         boolean insertion_place_found;
         do {
             BigInteger current_val = aux_node.getBook().getId();
@@ -69,6 +68,7 @@ public class RBTree {
                     aux_node = aux_node.getLeft();
                 }
             }
+            System.out.println("O Pedro eh Viado");
         } while (!insertion_place_found);
         Node new_node = aux_node.addChild(book);
         this.comparacoes+=1;
