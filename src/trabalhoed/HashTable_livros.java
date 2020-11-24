@@ -37,22 +37,22 @@ public class HashTable_livros {
     private int hash_H1(Registros l) { ///Funcao Hash h1
         long result = 0;
         String title = l.getTitle(); ///Pega o titulo do livro
-        double b = title.length() * 0.4; ///Pega a posicao 
-        int a = (int) b; ///
-        for (int i = 0; i < a; i++) {
-            if (i + 1 == a) {
-                if (title.charAt(i) % 2 == 1) {
-                    result *= (title.charAt(i)+2);
-                    result += 1;
-                } else {
-                    result *=title.charAt(i);
+        double b = title.length() * 0.4; ///Pega um valor referente a 40% do tamanho do titulo
+        int a = (int) b; ///Transforma o numero referente a 40% do tamanho do titulo em inteiro
+        for (int i = 0; i < a; i++) { ///percorre os caracteres referentes a 40% do titulo
+            if (i + 1 == a) { ///se for o ultimo caractere
+                if (title.charAt(i) % 2 == 1) { ///verifica se o ultimo caractere é impar e se for
+                    result *= (title.charAt(i)+2); ///incrementa o ultimo caractere em 2 e o multiplica pela soma ja obtida
+                    result += 1; ///incrementa o resultado da multiplicação em 1
+                } else { ///se o ultimo elemento nao for impar
+                    result *=title.charAt(i); ///multiplica a soma ate entao adquirida pelo ultimo caractere dos 40% 
                 }
 
-            } else {
-                result += title.charAt(i);
+            } else { ///se nao for o ultimo caractere
+                result += title.charAt(i); ///soma os caracteres
             }
         }
-        return (int) (result) % this.length;
+        return (int) (result) % this.length; ///retorna o resto do resultado pelo tamanho da hash 
     }
 
     private int double_hash(int h1, int h2, int i) { ///Calcula a hash dupla com os dados recebidos
@@ -61,14 +61,14 @@ public class HashTable_livros {
 
     private int hash_H2(Registros l) {
         String title = l.getTitle(); ///Pega o titulo do livro
-        double b = title.length() * 0.6;
-        int c = (int) b;
+        double b = title.length() * 0.6; ///Armazena um numero referente a 60% dos elementos do titulo
+        int c = (int) b; ///transforma o numero referente a 60% dos elementos do titulo em inteiro
         long result = 0;
-        for (; c < title.length(); c++) {
-            if (c + 1 == title.length()) {
-                result *= (int)title.charAt(c)*3.25;
-            } else {
-                result += title.charAt(c);
+        for (; c < title.length(); c++) { ///percorre os caracteres referentes aos ultimos 40% do titulo (a partir do inteiro referente a 60% do titulo)
+            if (c + 1 == title.length()) { ///vefica se eh o ultimo caractere do titulo
+                result *= (int)title.charAt(c)*3.25; ///multiplica a soma ate entao obtida por 3.25 e pelo ultimo caractere do titulo
+            } else { ///se nao for o ultimo caractere do titulo
+                result += title.charAt(c); ///faz a soma do caractere
             }
         }
         return 3 + (int) (result) % m; ///Retorna o resto +3 da divisao de result por m 
