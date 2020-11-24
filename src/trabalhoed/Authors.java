@@ -3,7 +3,7 @@ package trabalhoed;
 public class Authors {
     private int id;///Identificador do autor
     private String name; ///Nome do autor
-    private int number_books;
+    private int number_books; ///Numero de livros
     
     public Authors(){///Construtor
        this.id=0;
@@ -32,7 +32,7 @@ public class Authors {
         return number_books;
     }
 
-    public void setNumber_books() {
+    public void setNumber_books() { ///Atualiza numero de livros
         this.number_books+=1;
     }
    

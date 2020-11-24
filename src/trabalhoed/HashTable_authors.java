@@ -1,12 +1,12 @@
 package trabalhoed;
 
 public class HashTable_authors {
-    private Authors [] table_authors;
-    private int length;
-    private int m;
+    private Authors [] table_authors;  ///Vetor que faz o papel da hash de autores
+    private int length; ///Tamanho do hash de autores
+    private int m; ///Maior primo menor que o tamanho da tabela
     
-    public HashTable_authors(int n) {
-        this.length=encontra_primo_menor((n+n/2));
+    public HashTable_authors(int n) { ///Construtor. Recebe o numero de elementos que serao inseridos
+        this.length=encontra_primo_menor((n+n/2)); ///Tamanho da hash recebe o maior numero primo menor que n recebido + ele
         this.table_authors = new Authors[this.length];
         this.m=encontra_primo_menor(this.length);
         for(int i=0;i < this.length; i++){

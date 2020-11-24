@@ -62,16 +62,15 @@ public class RBTree {
                     && (aux_node.getLeft() == null));
             //Variável verifica se o próximo nó na busca seria nulo, logo, o lugar para inserir o novo nó foi encontrado
             if (!insertion_place_found) { //Caso não seja momento de inserir, descer mais na árvore
-                if (compare(current_val,book.getId())) {
+                if (compare(current_val, book.getId())) {
                     aux_node = aux_node.getRight();
                 } else {
                     aux_node = aux_node.getLeft();
                 }
             }
-            System.out.println("O Pedro eh Viado");
         } while (!insertion_place_found);
         Node new_node = aux_node.addChild(book);
-        this.comparacoes+=1;
+        this.comparacoes += 1;
         balanceTree(new_node);
     }
 
@@ -84,13 +83,13 @@ public class RBTree {
         if (parent.getColor() == 'r') {
             Node grandparent = parent.getParent();
             //Raiz sempre será preto, então grandparent nunca será nulo
-            if (new_node.getUncle() == null || new_node.getColor() == 'b') {
+            if (new_node.getUncle() == null || new_node.getUncle().getColor() == 'b') {
                 String rot_type = "";
-                if (compare(new_node.getBook().getId(),parent.getBook().getId())&& compare( grandparent.getBook().getId(),parent.getBook().getId())) {
+                if (compare(new_node.getBook().getId(), parent.getBook().getId()) && compare(grandparent.getBook().getId(), parent.getBook().getId())) {
                     rot_type = "RL";
                 } else if (compare(parent.getBook().getId(), new_node.getBook().getId()) && compare(parent.getBook().getId(), grandparent.getBook().getId())) {
                     rot_type = "LR";
-                } else if (compare(new_node.getBook().getId(), parent.getBook().getId())  &&   compare(parent.getBook().getId(), grandparent.getBook().getId()) ) {
+                } else if (compare(new_node.getBook().getId(), parent.getBook().getId()) && compare(parent.getBook().getId(), grandparent.getBook().getId())) {
                     rot_type = "LL";
                 } else {
                     rot_type = "RR";
@@ -118,7 +117,6 @@ public class RBTree {
             rotateLeft(parent);
             fixRotation(parent, "LL");
         } else {
-
             rotateRight(parent);
             fixRotation(parent, "RR");
 
@@ -126,9 +124,13 @@ public class RBTree {
     }
 
     public void rotateLeft(Node n) {
+        this.movimentacoes+=1;
         Node right = n.getRight();
         Node parent = n.getParent();
         n.setRight(right.getLeft());
+        if (right.getLeft() != null) {
+            right.getLeft().setParent(n);
+        }
         right.setLeft(n);
         n.setParent(right);
         right.setParent(parent);
@@ -138,16 +140,20 @@ public class RBTree {
             } else {
                 parent.setRight(right);
             }
-
         } else {
             root = right;
         }
+
     }
 
     public void rotateRight(Node n) {
+        this.movimentacoes+=1;
         Node left = n.getLeft();
         Node parent = n.getParent();
         n.setLeft(left.getRight());
+        if (left.getRight() != null) {
+            left.getRight().setParent(n);
+        }
         left.setRight(n);
         n.setParent(left);
         left.setParent(parent);
@@ -157,7 +163,6 @@ public class RBTree {
             } else {
                 parent.setRight(left);
             }
-
         } else {
             root = left;
         }
@@ -171,9 +176,12 @@ public class RBTree {
         return comparacoes;
     }
 
-    public void setComparacoes(long comparacoes) {
-        this.comparacoes = comparacoes;
+    public void setComparacoes() {
+        this.comparacoes = 0;
     }
-    
+
+    public long getMovimentacoes() {
+        return movimentacoes;
+    }
     
 }

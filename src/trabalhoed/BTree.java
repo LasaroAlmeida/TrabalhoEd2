@@ -9,11 +9,13 @@ public class BTree {
     private int m; //Grau dos nós da árvore
     private BNode root;
     private long comparacoes;
+    private long movimentacoes;
 
     public BTree(int m) {
         this.m = (m*2)+1;
         this.root = null;
         this.comparacoes = 0;
+        this.movimentacoes=0;
     }
 
     public void printTree() {
@@ -60,6 +62,8 @@ public class BTree {
         newRoot.addChild(right);
         this.comparacoes += 2;
         root = newRoot;
+        this.movimentacoes+=1;
+        
     }
 
     public BNode getParent(BNode n) {
@@ -126,6 +130,7 @@ public class BTree {
                 normalOverflow(parentNode, getParent(parentNode));
             }
         }
+        this.movimentacoes+=1;
     }
 
     private BNode auxSearch(BNode n, Registros val) {
@@ -200,5 +205,12 @@ public class BTree {
     public long getComparacoes() {
         return comparacoes;
     }
-    
+
+    public void setComparacoes() {
+        this.comparacoes =0;
+    }
+
+    public long getMovimentacoes() {
+        return movimentacoes;
+    }
 }
