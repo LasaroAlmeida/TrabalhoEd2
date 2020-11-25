@@ -8,7 +8,7 @@ public class RBTree {
     private long comparacoes = 0;
     private long movimentacoes = 0;
 
-    public RBTree(Registros root_value) {
+    public RBTree(Registros root_value) { //inicializa a arvore com seu no raiz
         Node n = new Node(root_value, 'b');
         this.root = n;
     }

@@ -6,25 +6,25 @@ import java.util.List;
 
 public class BNode {
 
-    private ArrayList<Registros> keys;
-    private ArrayList<BNode> children;
+    private ArrayList<Registros> keys; //lista nos nos da arvore B
+    private ArrayList<BNode> children; //lista de filhos do no 
     private int m;
 
-    public BNode(int m) {
+    public BNode(int m) { //cria a arvore com base na ordem
         this.m = m;
         this.keys = new ArrayList<>();
         this.children = new ArrayList<>();
     }
 
-    public boolean isFull() {
+    public boolean isFull() { //verifica se lista de nos esta cheia
         return keys.size() == m;
     }
 
-    public boolean isLeaf() {
+    public boolean isLeaf() { //verifica se o no eh folha
         return children.isEmpty();
     }
 
-    public BNode getChild(int i) {
+    public BNode getChild(int i) { //retorna o filho de um indice da lista de do no
         return children.get(i);
     }
 
