@@ -37,7 +37,7 @@ public class Node {
         return new_node;
     }
 
-    public Node getUncle() {
+    public Node getUncle() { //retorna o tio do no
         Node parent = this.parent;
         Node grandparent = parent.getParent();
         Node uncle = null;
@@ -49,7 +49,7 @@ public class Node {
         return uncle;
     }
 
-    public void recolorFamily() {
+    public void recolorFamily() { //recolore avo e tio
         Node parent = this.parent;
         if (parent == null) {
             return;
