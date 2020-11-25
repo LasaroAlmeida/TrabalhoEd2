@@ -7,7 +7,7 @@ import java.util.List;
 public class BNode {
 
     private ArrayList<Registros> keys; //lista nos nos da arvore B
-    private ArrayList<BNode> children; //lista de filhos da lista de nos -
+    private ArrayList<BNode> children; //lista de filhos da lista de Registros do no 
     private int m;
 
     public BNode(int m) { //cria a arvore com base na ordem
