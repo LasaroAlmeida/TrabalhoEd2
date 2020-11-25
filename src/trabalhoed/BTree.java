@@ -11,8 +11,8 @@ public class BTree {
     private long comparacoes;
     private long movimentacoes;
 
-    public BTree(int m) {
-        this.m = (m*2)+1;
+    public BTree(int m) { //construtor arvore B
+        this.m = (m*2)+1; //calcula o grau com base no numero passado como parametro
         this.root = null;
         this.comparacoes = 0;
         this.movimentacoes=0;
@@ -24,14 +24,14 @@ public class BTree {
         }
     }
 
-    public void rootOverflow() {
+    public void rootOverflow() { //executa a cisao quando ocorre na raiz
         ArrayList<Registros> keyList = root.getKeyList();
-        int middlePoint = (keyList.size() - 1) / 2;
-        BNode left = new BNode(this.m);
+        int middlePoint = (keyList.size() - 1) / 2; //pega o valor central
+        BNode left = new BNode(this.m); //cria 3 nos para armazenar os elementos oriundos da cisao
         BNode newRoot = new BNode(this.m);
         BNode right = new BNode(this.m);
         int i;
-        for (i = 0; i < keyList.size(); i++) {
+        for (i = 0; i < keyList.size(); i++) { //adiciona os elementos certos nos 3 nos criados
             if (i < middlePoint) {
                 left.insertKey(keyList.get(i));
                 if (!root.isLeaf()) {
@@ -58,19 +58,19 @@ public class BTree {
             right.addChild(root.getChild(i));
             this.comparacoes += 1;
         }
-        newRoot.addChild(left);
+        newRoot.addChild(left); //seta o no direito e esquerdo da nova raiz
         newRoot.addChild(right);
         this.comparacoes += 2;
-        root = newRoot;
+        root = newRoot; //muda a raiz da arvore
         this.movimentacoes+=1;
         
     }
 
-    public BNode getParent(BNode n) {
+    public BNode getParent(BNode n) { //retorna o pai de um no
         BNode aux = root;
         BNode parent = null;
         while (aux != n) {
-            parent = aux;
+            parent = aux; //percorre a arvore B sempre guardando o ultimo no pelo qual passou antes de descer
             ArrayList<Registros> auxKeyList = aux.getKeyList();
             for (int i = 0; i < auxKeyList.size(); i++) {
                 ArrayList<Registros> NKeyList = n.getKeyList();
@@ -86,13 +86,13 @@ public class BTree {
 
     }
 
-    public void normalOverflow(BNode overNode, BNode parentNode) {
+    public void normalOverflow(BNode overNode, BNode parentNode) { //cisao de um no que nao eh a raiz
         ArrayList<Registros> keyList = overNode.getKeyList();
         int middlePoint = (keyList.size() - 1) / 2;
-        BNode left = new BNode(this.m);
+        BNode left = new BNode(this.m); //cria os 2 novos nos criados pela cisao
         BNode right = new BNode(this.m);
         int i;
-        for (i = 0; i < keyList.size(); i++) {
+        for (i = 0; i < keyList.size(); i++) { //adiciona os elementos certos nos 2 nos criados e o central no pai do no cisionado
             if (i < middlePoint) {
                 left.insertKey(keyList.get(i));
                 if (!overNode.isLeaf()) {
@@ -120,20 +120,20 @@ public class BTree {
             right.addChild(overNode.getChild(i));
             this.comparacoes += 1;
         }
-        parentNode.addChild(left);
+        parentNode.addChild(left);  //seta o no direito e esquerdo do no central agora pertencente a a chave pai
         parentNode.addChild(right);
         this.comparacoes += 2;
-        if (parentNode.isFull()) {
-            if (parentNode == root) {
-                rootOverflow();
+        if (parentNode.isFull()) { //verifica se ha necessidade de cisao no pai
+            if (parentNode == root) { //verifica se o pai eh raiz
+                rootOverflow(); //cisao do no pai, um no raiz
             } else {
-                normalOverflow(parentNode, getParent(parentNode));
+                normalOverflow(parentNode, getParent(parentNode)); //cisao do no pai, um no nao raiz
             }
         }
         this.movimentacoes+=1;
     }
 
-    private BNode auxSearch(BNode n, Registros val) {
+    private BNode auxSearch(BNode n, Registros val) { //auxilia na busca de elementos na arvore
         for (Registros i : n.getKeyList()) {
             if (i.getId().equals(val.getId())) {
                 this.comparacoes += 1;
@@ -154,12 +154,12 @@ public class BTree {
         return auxSearch(n.getChild(i), val);
     }
 
-    public BNode search(Registros val) {
+    public BNode search(Registros val) { //executa a busca de um elemento
         return auxSearch(root, val);
     }
 
-    public void insert(Registros val) {
-        if (root == null) {
+    public void insert(Registros val) { //insere elemento na arvore B
+        if (root == null) { //verifica se raiz nao eh null, se for a arvore ainda nao foi criada e o elemento passado sera o primeiro
             root = new BNode(this.m);
             root.insertKey(val);
         } else {
@@ -167,9 +167,9 @@ public class BTree {
             BNode aux = root;
             BNode parentNode = null;
             while (!finished) {
-                if (aux.isLeaf()) {
-                    aux.insertKey(val);
-                    if (aux.isFull()) {
+                if (aux.isLeaf()) { //percorre a arvore ate que um no folha seha encontrado
+                    aux.insertKey(val); //insere elemento na lista do no
+                    if (aux.isFull()) { //verifica se sera necessario fazer a cisao do no e se ela eh no nó raiz ou nao
                         if (aux == root) {
                             rootOverflow();
                             this.comparacoes += 1;
@@ -178,9 +178,9 @@ public class BTree {
                             this.comparacoes += 1;
                         }
                     }
-                    finished = true;
-                } else {
-                    List<Registros> keyList = aux.getKeyList();
+                    finished = true; //elemento inserido, o while para na proxima iteracao
+                } else { //percorre a arvore B a procura do local de insercao
+                    List<Registros> keyList = aux.getKeyList(); 
                     for (int i = 0; i < keyList.size(); i++) {
                         if (compare(val.getId(), keyList.get(i).getId())) {
                             parentNode = aux;
