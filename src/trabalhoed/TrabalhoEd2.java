@@ -189,7 +189,7 @@ public class TrabalhoEd2 {
                     case 3:
                         Busca_em_Estruturas_Balanceadas(a); ///Secao 3
                         break;
-                    case 0:///Encerra o programa
+                    case 0:///Encerra o programa ///O programa so ira gerar o txt corretamente se o 0(zero) for escolhido para encerrar o programa
                         break;
                     default:
                         System.out.println("Opcao Invalida");
@@ -554,7 +554,8 @@ public class TrabalhoEd2 {
         }
         file.println("==========================================================================================\n\n");
     }
-
+    
+     ///Secao 3//////////////////////////////////////////////////////////////////
     public static void print_output1(String tipo, int t) { ///Funcao de impressao de cabeçalho
         file.println(tipo);
         file.println("Numero de Elementos: " + t + "**********************");
@@ -584,7 +585,7 @@ public class TrabalhoEd2 {
         time = new double[2];
         comparacoes = new long[2];
         movimentacoes = new long[2];
-        file.println("Secao 2: =================================================================================");
+        file.println("Secao 3: =================================================================================");
         int i = 0;
         List<Registros> aleatoria = new ArrayList<Registros>();
 
@@ -593,7 +594,6 @@ public class TrabalhoEd2 {
         double final_time;
         int cont = 0;
 
-        System.out.println(number_tests);
         file.println("&&&&&&&& Arvore Vermelho-Preto &&&&&&&&");
         System.out.println("&&&&&&&& Arvore Vermelho-Preto &&&&&&&&");
         while (i < number_tests) { ///Faz o numero de testes recebido no inicio
