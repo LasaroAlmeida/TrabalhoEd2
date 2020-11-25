@@ -8,7 +8,7 @@ public class RBTree {
     private long comparacoes = 0;
     private long movimentacoes = 0;
 
-    public RBTree(Registros root_value) {
+    public RBTree(Registros root_value) { //inicializa a arvore com seu no raiz
         Node n = new Node(root_value, 'b');
         this.root = n;
     }
@@ -74,18 +74,18 @@ public class RBTree {
         balanceTree(new_node);
     }
 
-    public void balanceTree(Node new_node) {
-        Node parent = new_node.getParent();
-        if (parent == null) {
-            new_node.setColor('b');
+    public void balanceTree(Node new_node) { //balanceia a arvore fazendo as rotacoes necessarias
+        Node parent = new_node.getParent(); //guarda o pai do no
+        if (parent == null) { //se no passado for a raiz
+            new_node.setColor('b'); //muda sua cor para preto
             return;
         }
-        if (parent.getColor() == 'r') {
-            Node grandparent = parent.getParent();
+        if (parent.getColor() == 'r') { //se pai do no passado for vermelho
+            Node grandparent = parent.getParent(); //guarda o avo do no passado
             //Raiz sempre será preto, então grandparent nunca será nulo
-            if (new_node.getUncle() == null || new_node.getUncle().getColor() == 'b') {
-                String rot_type = "";
-                if (compare(new_node.getBook().getId(), parent.getBook().getId()) && compare(grandparent.getBook().getId(), parent.getBook().getId())) {
+            if (new_node.getUncle() == null || new_node.getUncle().getColor() == 'b') { //verifica se o tio eh null ou se eh preto
+                String rot_type = ""; //string que guardara os caracteres referentes a a rotacao necessaria
+                if (compare(new_node.getBook().getId(), parent.getBook().getId()) && compare(grandparent.getBook().getId(), parent.getBook().getId())) { //analisa qual tipo de rotacao sera feita
                     rot_type = "RL";
                 } else if (compare(parent.getBook().getId(), new_node.getBook().getId()) && compare(parent.getBook().getId(), grandparent.getBook().getId())) {
                     rot_type = "LR";
@@ -94,36 +94,36 @@ public class RBTree {
                 } else {
                     rot_type = "RR";
                 }
-                fixRotation(new_node, rot_type);
+                fixRotation(new_node, rot_type); //chama a funcao que executa as rotacoes
             } else {
-                new_node.recolorFamily();
-                balanceTree(grandparent);
+                new_node.recolorFamily(); //chama a funcao para recolorir os nos
+                balanceTree(grandparent); //chama a funcao de balanceamento para o avo
             }
         }
     }
 
-    public void fixRotation(Node n, String rot_type) {
-        Node parent = n.getParent();
-        Node grandparent = parent.getParent();
-        if (rot_type.equals("LL")) {
+    public void fixRotation(Node n, String rot_type) { //funcao que revebe um no e uma string e executa as rotacoes com informacoes desse no
+        Node parent = n.getParent(); //armazena seu pai
+        Node grandparent = parent.getParent(); //armazena seu avo
+        if (rot_type.equals("LL")) { //rotacao simples a direita
             rotateRight(grandparent);
-            parent.swapColor(grandparent);
-            balanceTree(parent);
-        } else if (rot_type.equals("RR")) {
+            parent.swapColor(grandparent); //troca as cores do pai e do avo
+            balanceTree(parent); //chama a funcao de balanceamento novamente
+        } else if (rot_type.equals("RR")) { //rotacao simples a esquerda
             rotateLeft(grandparent);
-            parent.swapColor(grandparent);
-            balanceTree(parent);
-        } else if (rot_type.equals("LR")) {
+            parent.swapColor(grandparent); //troca as cores do pai e do avo
+            balanceTree(parent); //chama a funcao de balanceamento novamente
+        } else if (rot_type.equals("LR")) { //rotacao dupla a esquerda
             rotateLeft(parent);
             fixRotation(parent, "LL");
-        } else {
+        } else { //rotacao dupla a direita
             rotateRight(parent);
             fixRotation(parent, "RR");
 
         }
     }
 
-    public void rotateLeft(Node n) {
+    public void rotateLeft(Node n) { //executa rotacao a esquerda
         this.movimentacoes+=1;
         Node right = n.getRight();
         Node parent = n.getParent();
@@ -146,7 +146,7 @@ public class RBTree {
 
     }
 
-    public void rotateRight(Node n) {
+    public void rotateRight(Node n) { //executa rotacao a direita
         this.movimentacoes+=1;
         Node left = n.getLeft();
         Node parent = n.getParent();
