@@ -49,17 +49,17 @@ public class RBTree {
         }
     }
 
-    public void insert(Registros book) {
+    public void insert(Registros book) { //insere elemento na arvore 
         Node aux_node = root;
         boolean insertion_place_found;
-        do {
+        do { //percorre a arvore ate que encontre a posicao em que o elemento sera inserido
             BigInteger current_val = aux_node.getBook().getId();
             if (book.getId() == current_val) { //Essa árvore não terá valores duplicados
                 System.out.println("Esse valor já existe na árvore!\n");
                 return;
             }
             insertion_place_found = ((compare(current_val, book.getId())) && (aux_node.getRight() == null)) || (compare(book.getId(), current_val)
-                    && (aux_node.getLeft() == null));
+                    && (aux_node.getLeft() == null)); 
             //Variável verifica se o próximo nó na busca seria nulo, logo, o lugar para inserir o novo nó foi encontrado
             if (!insertion_place_found) { //Caso não seja momento de inserir, descer mais na árvore
                 if (compare(current_val, book.getId())) {
@@ -68,8 +68,8 @@ public class RBTree {
                     aux_node = aux_node.getLeft();
                 }
             }
-        } while (!insertion_place_found);
-        Node new_node = aux_node.addChild(book);
+        } while (!insertion_place_found); //enquanto o local de insercao nao for encontrado
+        Node new_node = aux_node.addChild(book);  //insere elemento como filho e pega sua posicao
         this.comparacoes += 1;
         balanceTree(new_node);
     }
