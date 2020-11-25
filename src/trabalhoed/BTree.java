@@ -11,8 +11,8 @@ public class BTree {
     private long comparacoes;
     private long movimentacoes;
 
-    public BTree(int m) {
-        this.m = (m*2)+1;
+    public BTree(int n) {
+        this.m = (n*2)+1; //n é o valor mínimo de chave por nó, que será igual a m/2 nessa árvore
         this.root = null;
         this.comparacoes = 0;
         this.movimentacoes=0;
@@ -20,64 +20,66 @@ public class BTree {
 
     public void printTree() {
         if (root != null) {
-            root.printNode(0, -1);
+            root.printNode(0, -1); //Chama função recursiva para imprimir nó iniciando pela raiz, 0 é o identificador do nó raiz e -1 uma flag de ter um pai nulo
         }
     }
 
     public void rootOverflow() {
         ArrayList<Registros> keyList = root.getKeyList();
-        int middlePoint = (keyList.size() - 1) / 2;
-        BNode left = new BNode(this.m);
-        BNode newRoot = new BNode(this.m);
-        BNode right = new BNode(this.m);
+        int middlePoint = (keyList.size() - 1) / 2; //elemento que representa a mediana das chaves
+        BNode left = new BNode(this.m); //nó que será a parte da esquerda do nó a ser partido
+        BNode newRoot = new BNode(this.m); //nó que será a nova raiz da árvore
+        BNode right = new BNode(this.m); //nó que será a parte da direita do nó a ser partido
         int i;
         for (i = 0; i < keyList.size(); i++) {
-            if (i < middlePoint) {
-                left.insertKey(keyList.get(i));
-                if (!root.isLeaf()) {
+            if (i < middlePoint) { //chave que está antes da mediana
+                left.insertKey(keyList.get(i)); //insere a chave no nó da esquerda
+                if (!root.isLeaf()) { //caso a raiz não seja o único nó da árvore, os filhos devem ser passados para o novo nó
                     left.addChild(root.getChild(i));
                     this.comparacoes += 1;
                 }
             }
-            if (i == middlePoint) {
-                newRoot.insertKey(keyList.get(i));
-                if (!root.isLeaf()) {
+            if (i == middlePoint) { //chave da mediana
+                newRoot.insertKey(keyList.get(i)); //insere a mediana na nova raiz
+                if (!root.isLeaf()) { //caso a raiz não seja o único nó da árvore, os filhos devem ser passados para o novo nó
                     left.addChild(root.getChild(i));
                     this.comparacoes += 1;
                 }
             }
-            if (i > middlePoint) {
-                right.insertKey(keyList.get(i));
-                if (!root.isLeaf()) {
+            if (i > middlePoint) { //chave que está depois da mediana
+                right.insertKey(keyList.get(i)); //insere a chave no nó da direita
+                if (!root.isLeaf()) {  //caso a raiz não seja o único nó da árvore, os filhos devem ser passados para o novo nó
                     right.addChild(root.getChild(i));
                     this.comparacoes += 1;
                 }
             }
         }
-        if (!root.isLeaf()) {
+        if (!root.isLeaf()) { //para um nó com n chaves, há n+1 filhos, então esse bloco deve ser executado mais uma vez para o último filho, caso ele exista
             right.addChild(root.getChild(i));
             this.comparacoes += 1;
+            //nesse caso não há chave para inserir, apenas o filho
         }
+        //conecta os nós da esquerda e da direita na nova raiz
         newRoot.addChild(left);
         newRoot.addChild(right);
-        this.comparacoes += 2;
+        this.comparacoes += 2; //para cada inserção de nó filho, uma nova comparação é feita
         root = newRoot;
         this.movimentacoes+=1;
-        
+
     }
 
-    public BNode getParent(BNode n) {
+    public BNode getParent(BNode n) { //n deve ser um nó que existe na árvore
         BNode aux = root;
         BNode parent = null;
-        while (aux != n) {
-            parent = aux;
+        while (aux != n) { //ponteiro auxiliar busca o nó n passado como parâmetro
+            parent = aux; //como a cada iteração o aux "descerá" para um nó filho, o parent receberá o valor de aux antes disso
             ArrayList<Registros> auxKeyList = aux.getKeyList();
-            for (int i = 0; i < auxKeyList.size(); i++) {
+            for (int i = 0; i < auxKeyList.size(); i++) { //percorre todas as chaves do nó para encontrar o filho certo
                 ArrayList<Registros> NKeyList = n.getKeyList();
-                if (compare(NKeyList.get(NKeyList.size() - 1).getId(), auxKeyList.get(i).getId())) {
+                if (compare(NKeyList.get(NKeyList.size() - 1).getId(), auxKeyList.get(i).getId())) { //se a última chave do nó N for menor que a percorrida, descer para o filho correspondente
                     aux = aux.getChild(i);
                     break;
-                } else if (i == auxKeyList.size() - 1) {
+                } else if (i == auxKeyList.size() - 1) { // caso nenhum candidato para filho tenha passado, o ponteiro segue para o último filho do nó
                     aux = aux.getChild(i + 1);
                 }
             }
@@ -89,42 +91,43 @@ public class BTree {
     public void normalOverflow(BNode overNode, BNode parentNode) {
         ArrayList<Registros> keyList = overNode.getKeyList();
         int middlePoint = (keyList.size() - 1) / 2;
-        BNode left = new BNode(this.m);
-        BNode right = new BNode(this.m);
+        BNode left = new BNode(this.m); //nó que será a parte da esquerda do nó a ser partido
+        BNode right = new BNode(this.m); //nó que será a parte da direita do nó a ser partido
         int i;
         for (i = 0; i < keyList.size(); i++) {
-            if (i < middlePoint) {
-                left.insertKey(keyList.get(i));
-                if (!overNode.isLeaf()) {
+            if (i < middlePoint) { //chave antes da mediana
+                left.insertKey(keyList.get(i)); //insere a chave no nó da esquerda
+                if (!overNode.isLeaf()) { //caso o nó partido não seja o folha, os filhos devem ser passados para o novo nó
                     left.addChild(overNode.getChild(i));
                     comparacoes += 1;
                 }
             }
-            if (i == middlePoint) {
-                parentNode.insertKey(keyList.get(i));
+            if (i == middlePoint) { //chave é a mediana
+                parentNode.insertKey(keyList.get(i)); //insere a chave no nó pai
                 parentNode.removeChild(overNode);
                 if (!overNode.isLeaf()) {
                     left.addChild(overNode.getChild(i));
                     this.comparacoes += 1;
                 }
             }
-            if (i > middlePoint) {
-                right.insertKey(keyList.get(i));
-                if (!overNode.isLeaf()) {
+            if (i > middlePoint) { //chave depois da mediana
+                right.insertKey(keyList.get(i)); //insere a chave no nó da direita
+                if (!overNode.isLeaf()) { //caso o nó partido não seja o folha, os filhos devem ser passados para o novo nó
                     right.addChild(overNode.getChild(i));
                     this.comparacoes += 1;
                 }
             }
         }
-        if (!overNode.isLeaf()) {
+        if (!overNode.isLeaf()) { //para um nó com n chaves, há n+1 filhos, então esse bloco deve ser executado mais uma vez para o último filho, caso ele exista
             right.addChild(overNode.getChild(i));
             this.comparacoes += 1;
         }
-        parentNode.addChild(left);
+        //nesse caso não há chave para inserir, apenas o filho
+        parentNode.addChild(left); //conecta os nós da esquerda e da direita na nova raiz
         parentNode.addChild(right);
-        this.comparacoes += 2;
-        if (parentNode.isFull()) {
-            if (parentNode == root) {
+        this.comparacoes += 2; //para cada inserção de nó filho, uma comparação
+        if (parentNode.isFull()) { //como a quebra do nó envia um nó novo para o pai, pode haver um overflow novo
+            if (parentNode == root) { //caso ele seja raiz, overflow de raiz, caso contrário, um overflow normal
                 rootOverflow();
             } else {
                 normalOverflow(parentNode, getParent(parentNode));
@@ -134,24 +137,24 @@ public class BTree {
     }
 
     private BNode auxSearch(BNode n, Registros val) {
-        for (Registros i : n.getKeyList()) {
-            if (i.getId().equals(val.getId())) {
+        for (Registros i : n.getKeyList()) { //percorre a lista de chaves do nó
+            if (i.getId().equals(val.getId())) { //caso encontre a chave, retornar o nó vigente
                 this.comparacoes += 1;
                 return n;
             }
         }
-        if (n.isLeaf()) {
+        if (n.isLeaf()) { //caso o nó seja folha e não tenha sido achada a chave, retornar nulo para que não há a chave na árvore
             return null;
         }
         ArrayList<Registros> keyList = n.getKeyList();
         int i;
-        for (i = 0; i < keyList.size(); i++) {
+        for (i = 0; i < keyList.size(); i++) { //busca o filho certo para continuar a busca recursiva na arvore
             if (compare(val.getId(), keyList.get(i).getId())) {
                 return auxSearch(n.getChild(i), val);
             }
 
         }
-        return auxSearch(n.getChild(i), val);
+        return auxSearch(n.getChild(i), val); //caso o código chegue aqui, a busca não continuou em outros filhos, logo deve continuar no último
     }
 
     public BNode search(Registros val) {
@@ -159,17 +162,17 @@ public class BTree {
     }
 
     public void insert(Registros val) {
-        if (root == null) {
+        if (root == null) { //para árvore vazia, criar raiz
             root = new BNode(this.m);
             root.insertKey(val);
         } else {
             boolean finished = false;
             BNode aux = root;
             BNode parentNode = null;
-            while (!finished) {
-                if (aux.isLeaf()) {
+            while (!finished) { //loop busca o lugar certo para inserir a nova chave
+                if (aux.isLeaf()) { //caso o nó aux seja folha, inserir a chave nele
                     aux.insertKey(val);
-                    if (aux.isFull()) {
+                    if (aux.isFull()) { //caso o aux fique lotado, chamar a devida função de overflow
                         if (aux == root) {
                             rootOverflow();
                             this.comparacoes += 1;
@@ -178,11 +181,11 @@ public class BTree {
                             this.comparacoes += 1;
                         }
                     }
-                    finished = true;
-                } else {
+                    finished = true; //sair do loop
+                } else { //buscar o próximo nó, até chegar em uma folha
                     List<Registros> keyList = aux.getKeyList();
                     for (int i = 0; i < keyList.size(); i++) {
-                        if (compare(val.getId(), keyList.get(i).getId())) {
+                        if (compare(val.getId(), keyList.get(i).getId())) { //ir para o filho no primeiro caso de chave maior do que a que se tenta inserir
                             parentNode = aux;
                             aux = aux.getChild(i);
                             break;
@@ -196,7 +199,7 @@ public class BTree {
         }
     }
 
-    public boolean compare(BigInteger one, BigInteger two) {
+    public boolean compare(BigInteger one, BigInteger two) { //retornará verdadeiro caso o segundo parâmetro seja maior que o primeiro
         int aux = one.compareTo(two);
         comparacoes += 1;
         return aux < 0;

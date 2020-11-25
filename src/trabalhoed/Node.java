@@ -7,7 +7,7 @@ public class Node {
     private Registros book;
     private Node parent, left, right;
     private char color; //PODE VARIAR ENTRE B (BLACK) OU R (RED)
-    
+
     public Node(Registros book) {
         this.book = book;
         this.parent = null;
@@ -21,7 +21,7 @@ public class Node {
         this.color = color;
     }
 
-    public boolean compare(BigInteger one, BigInteger two) {
+    public boolean compare(BigInteger one, BigInteger two) { //retornará verdadeiro caso o segundo parâmetro seja maior que o primeiro
         int aux = one.compareTo(two);
         return aux < 0;
     }
@@ -41,7 +41,7 @@ public class Node {
         Node parent = this.parent;
         Node grandparent = parent.getParent();
         Node uncle = null;
-        if (grandparent.getLeft() == parent) {
+        if (grandparent.getLeft() == parent) { //retorna o nó filho do avô que é diferente do pai
             uncle = grandparent.getRight();
         } else {
             uncle = grandparent.getLeft();
@@ -51,11 +51,12 @@ public class Node {
 
     public void recolorFamily() {
         Node parent = this.parent;
-        if (parent == null) {
+        if (parent == null) { //sem pai não há família para recolorir, contudo, não é um caso que deveria acontecer em uma árvore rb
             return;
         }
         Node grandparent = parent.getParent();
-        grandparent.setColor('r');
+        grandparent.setColor('r'); //avô fica vermelho
+        //pai e tio ficam pretos
         if (grandparent.getLeft() != null) {
             grandparent.getLeft().setColor('b');
         }
