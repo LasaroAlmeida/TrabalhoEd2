@@ -6,25 +6,25 @@ import java.util.List;
 
 public class BNode {
 
-    private ArrayList<Registros> keys;
-    private ArrayList<BNode> children;
+    private ArrayList<Registros> keys; //lista nos nos da arvore B
+    private ArrayList<BNode> children; //lista de filhos da arvore B -
     private int m;
 
-    public BNode(int m) {
+    public BNode(int m) { //cria a arvore com base na ordem
         this.m = m;
         this.keys = new ArrayList<>();
         this.children = new ArrayList<>();
     }
 
-    public boolean isFull() {
+    public boolean isFull() { //verifica se lista de nos esta cheia
         return keys.size() == m;
     }
 
-    public boolean isLeaf() {
+    public boolean isLeaf() { //verifica se o no eh folha
         return children.isEmpty();
     }
 
-    public BNode getChild(int i) {
+    public BNode getChild(int i) { //retorna o filho de um indice da lista de do no
         return children.get(i);
     }
 
@@ -37,7 +37,7 @@ public class BNode {
         return aux < 0;
     }
     
-    public void addChild(BNode b) {
+    public void addChild(BNode b) { //adiciona filho em um no
         for (int i = 0; i < this.children.size(); i++) {
             ArrayList<Registros> keys = children.get(i).getKeyList();
             if (compare(b.getKeyList().get(b.getKeyList().size() - 1).getId()  ,  keys.get(0).getId())) {
@@ -48,11 +48,11 @@ public class BNode {
         children.add(b);
     }
 
-    public void removeChild(BNode n) {
+    public void removeChild(BNode n) { //remove o no filho do no passado
         children.remove(n);
     }
 
-    public void insertKey(Registros val) {
+    public void insertKey(Registros val) { //insere um id na lista do no
         int n = keys.size();
         for (int i = 0; i < n; i++) {
             if (keys.get(i).getId() == val.getId()) {
